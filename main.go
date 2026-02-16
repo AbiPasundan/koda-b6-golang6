@@ -17,7 +17,7 @@ func main() {
 		{
 			Id:   1,
 			Name: "test",
-			Wait: 1,
+			Wait: 9,
 		},
 		{
 			Id:   2,
@@ -31,16 +31,14 @@ func main() {
 		},
 	}
 
-	// start := time.Now()
-
 	fmt.Println("Pemesanan Ayam Goyek")
 
+	// start := time.Now()
 	// for x := range queue {
-	// 	// time.Sleep(time.Duration(queue[x].Wait) * time.Second)
-
-	// 	// duration := time.Since(start)
-	// 	// fmt.Print("\n\n\nPesanan: ", queue[x].Name, " selesai dalam ", queue[x].Wait, "\n\n")
-	// 	// fmt.Print("\n\n semuanya selesai dalam waktu ", duration.Seconds())
+	// 	time.Sleep(time.Duration(queue[x].Wait) * time.Second)
+	// 	duration := time.Since(start)
+	// 	fmt.Print("\n\n\nPesanan: ", queue[x].Name, " selesai dalam ", queue[x].Wait, "\n\n")
+	// 	fmt.Print("\n\n semuanya selesai dalam waktu ", duration.Seconds())
 	// }
 
 	var wg sync.WaitGroup
@@ -51,17 +49,12 @@ func main() {
 		for x := range queue {
 			defer wg.Done()
 			cen <- queue[x].Name
-			// queue[x].Wait
-			// time.Sleep(time.Duration(queue[x].Wait) * time.Second)
 		}
 	}()
 	wg.Wait()
-	// fmt.Println(c)
 	for x := range len(cen) {
 		c := <-cen
 		time.Sleep(time.Duration(queue[x].Wait) * time.Second)
-		// dur := queue[x].Wait) * time.Second
-		// fmt.Println(c)
 		fmt.Print("\nPesanan: ", c, " selesai dalam ", queue[x].Wait, " Detik \n\n")
 
 	}
