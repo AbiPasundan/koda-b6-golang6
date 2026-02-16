@@ -8,4 +8,4 @@ Run this program and you will see queue checkout buying ayam goyeng
 
 ## Demo
 
-![Demo](golang6.mp4)
+![Demo](golang6.gif)
