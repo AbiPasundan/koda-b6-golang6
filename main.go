@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -12,14 +13,11 @@ type Queue struct {
 }
 
 func main() {
-	// fmt.Println("hahahaah")
-	// var wg sync.WaitGroup
-
 	queue := []Queue{
 		{
 			Id:   1,
 			Name: "test",
-			Wait: 9,
+			Wait: 1,
 		},
 		{
 			Id:   2,
@@ -33,48 +31,38 @@ func main() {
 		},
 	}
 
-	// times := time.Second
-	// fmt.Println(times)
-	// fmt.Println(time.Sleep(5))
+	// start := time.Now()
 
-	start := time.Now()
+	fmt.Println("Pemesanan Ayam Goyek")
 
-	fmt.Println("bersiaplah")
+	// for x := range queue {
+	// 	// time.Sleep(time.Duration(queue[x].Wait) * time.Second)
 
-	for x := range queue {
+	// 	// duration := time.Since(start)
+	// 	// fmt.Print("\n\n\nPesanan: ", queue[x].Name, " selesai dalam ", queue[x].Wait, "\n\n")
+	// 	// fmt.Print("\n\n semuanya selesai dalam waktu ", duration.Seconds())
+	// }
+
+	var wg sync.WaitGroup
+
+	wg.Add(len(queue))
+	cen := make(chan string, len(queue))
+	go func() {
+		for x := range queue {
+			defer wg.Done()
+			cen <- queue[x].Name
+			// queue[x].Wait
+			// time.Sleep(time.Duration(queue[x].Wait) * time.Second)
+		}
+	}()
+	wg.Wait()
+	// fmt.Println(c)
+	for x := range len(cen) {
+		c := <-cen
 		time.Sleep(time.Duration(queue[x].Wait) * time.Second)
-
-		duration := time.Since(start)
-		fmt.Print("\n\n\nPesanan: ", queue[x].Name, " selesai dalam ", duration.Seconds(), "\n")
-
-		// fmt.Println("time elapsed in minutes:", duration.Minutes())
-		// fmt.Println("time elapsed in hours:", duration.Hours())
+		// dur := queue[x].Wait) * time.Second
+		// fmt.Println(c)
+		fmt.Print("\nPesanan: ", c, " selesai dalam ", queue[x].Wait, " Detik \n\n")
 
 	}
-
-	// for x := range queue {
-	// 	value := make(chan []string)
-	// 	go func() {
-	// 		defer wg.Done()
-	// 		rawResult := queue[x].Name
-	// 		// value = <-rawResult
-	// 	}()
-	// }
-
-	// for x := range queue {
-	// 	value := make(chan Queue)
-	// 	go func() {
-	// 		defer wg.Done()
-	// 		fmt.Println(queue[x])
-	// 		value <- queue[x]
-	// 	}()
-	// 	result := <-value
-	// 	fmt.Println(result)
-	// }
-	// wg.Wait()
-
-	// go func() {
-	// 	fmt.Println(12)
-	// }()
-
 }
